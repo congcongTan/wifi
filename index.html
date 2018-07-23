@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.85, user-scalable=no">
+
+  <title>获取 Wifi 密码</title>
+
+  <link rel="stylesheet" href="css/all.css">
+  <script src="js/all.js"></script>
+  
+</head>
+
+<body>
+
+<section class="g-flexview">
+
+  <header class="m-navbar">
+      <div class="navbar-center"><span class="navbar-title">获取 Wifi 密码</span></div>
+  </header>
+
+  <section class="g-scrollview">
+
+    <br><br><br>
+
+    <center>
+      <img src="img/logo.png" width="70%">
+    </center>
+
+    <br><br><br>
+
+    <form onsubmit="return sm()" id="form">
+
+      <div class="m-cell">
+        <div class="cell-item">
+          <div class="cell-left">手机号码：</div>
+          <div class="cell-right">
+            <input class="cell-input" type="text" maxlength="11" placeholder="请输入手机号" name="phone" />
+            <a href="javascript:;" class="btn btn-disabled" id="getCode">获取验证码</a>
+          </div>
+        </div>
+        <div class="cell-item">
+          <div class="cell-left">短信验证：</div>
+          <div class="cell-right"><input type="text" class="cell-input" placeholder="请输入手机收到的验证码" name="code" /></div>
+        </div>
+      </div>
+
+      <div class="m-button">
+        <button class="btn-block btn-disabled" id="submit" disabled>获取wifi密码</button>
+      </div>
+
+    </form>
+
+    <div style="display: none" id="account">
+
+      <div class="m-cell">
+        <div class="cell-item">
+          <div class="cell-left">WIFI：</div>
+          <div class="cell-right">
+            <input type="text" class="cell-input" value="广交会好日子家具" />
+          </div>
+        </div>
+        <div class="cell-item">
+          <div class="cell-left">密码：</div>
+          <div class="cell-right">
+            <input class="cell-input" type="text" value="666888" id="wifi_password" />
+            <a href="javascript:;" class="btn btn-warning copy" data-clipboard-action="copy" data-clipboard-target="#wifi_password">复制密码</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+<script>
+  !function (win, $) {
+
+      var dialog = win.YDUI.dialog;
+      var $getCode = $('#getCode');
+
+      // 定义参数
+      $getCode.sendCode({
+        disClass: 'btn-disabled', // 禁用按钮样式【必填】
+        secs: 15, // 倒计时时长 [可选，默认：60秒]
+        run: false,// 是否初始化自动运行 [可选，默认：false]
+        runStr: '{%s}秒后重新获取',// 倒计时显示文本 [可选，默认：58秒后重新获取]
+        resetStr: '重新获取验证码'// 倒计时结束后按钮显示文本 [可选，默认：重新获取验证码]
+      });
+
+      $getCode.on('click', function () {
+        var $this = $(this);
+        dialog.loading.open('发送中...');
+        // ajax 成功发送验证码后调用【start】
+        setTimeout(function () { //模拟ajax发送
+            dialog.loading.close();
+            $this.sendCode('start');
+            dialog.toast('已发送', 'success', 1500);
+        }, 800);
+      });
+
+    $('input[name="phone"]').on('keyup', function(){
+      if( $(this).val().length == 11 ){
+        $('#getCode')
+        .removeClass('btn-disabled')
+        .addClass('btn-warning')
+        .prop('disabled', false);
+      }else{
+        $('#getCode')
+        .removeClass('btn-warning')
+        .addClass('btn-disabled')
+        .prop('disabled', true);
+      }
+    });
+
+    $('input[name="code"]').on('keyup', function(){
+      if( $(this).val().length == 6 ){
+        $('#submit')
+        .removeClass('btn-disabled')
+        .addClass('btn-primary')
+        .prop('disabled', false);
+      }else{
+        $('#submit')
+        .removeClass('btn-primary')
+        .addClass('btn-disabled')
+        .prop('disabled', true);
+      }
+    });
+
+    var clipboard = new ClipboardJS('.copy');
+
+  }(window, jQuery);
+
+  function sm(){
+
+    $('#form').hide();
+    $('#account').show();
+
+    return false;
+  }
+</script>
+
+<div style="display: none"><script src="https://s19.cnzz.com/z_stat.php?id=1274251200&web_id=1274251200"></script></div>
+</body>
+</html>
